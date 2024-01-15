@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "../interfaces";
+import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   username: string;
@@ -18,6 +19,7 @@ interface IFormInput {
 }
 
 const RegisterPage = () => {
+  const navigateToLogin = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -30,9 +32,9 @@ const RegisterPage = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     setIsLoading(true);
-    
+
     try {
-      const res = await axiosInstance.post("/auth/local/register", data);
+     await axiosInstance.post("/auth/local/register", data);
       toast.success(
         "You will navigate to the login page after 2 seconds to login!",
         {
@@ -45,10 +47,12 @@ const RegisterPage = () => {
           },
         }
       );
-      console.log(res.data);
+      setTimeout(() => {
+        navigateToLogin("/login");
+      }, 2000);
     } catch (error) {
       const errorObj = error as AxiosError<ErrorResponse>;
-      console.log(errorObj.response?.data.error.message);
+      // console.log(errorObj.response?.data.error.message);
       toast.error(`${errorObj.response?.data.error.message}`, {
         position: "bottom-center",
         duration: 1500,
@@ -63,7 +67,7 @@ const RegisterPage = () => {
     }
   };
 
-  console.log(errors);
+  // console.log(errors);
 
   // Renders
   const renderResgisterForm = REGISTER_FORM.map(
