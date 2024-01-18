@@ -25,3 +25,9 @@ export interface ILoginInput {
     pattern?: RegExp;
   };
 }
+
+export interface ITodo {
+  id: number;
+  title: string;
+  description: string;
+}
