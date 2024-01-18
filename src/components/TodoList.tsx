@@ -5,6 +5,7 @@ import Modal from "./ui/Modal";
 import { useState } from "react";
 import Textarea from "./ui/Textarea";
 import { ITodo } from "../interfaces";
+import axiosInstance from "../config/axios.config";
 
 const storageKey = "loggedInUser";
 const userDataString = localStorage.getItem(storageKey);
@@ -42,6 +43,31 @@ const TodoList = () => {
     setIsOpenEditModal(false);
   };
 
+  const onChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setTodoToEdit({
+      ...todoToEdit,
+      [name]: value,
+    });
+  };
+
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { id, title, description } = todoToEdit;
+    const res = await axiosInstance.put(
+      `/todos/${id}`,
+      { data: { title, description } },
+      {
+        headers: {
+          Authorization: `Bearer ${userData?.jwt}`,
+        },
+      }
+    );
+    console.log(res.data.data.attributes);
+  };
+
   if (isPending) return "Loading...";
 
   return (
@@ -71,22 +97,29 @@ const TodoList = () => {
         closeModal={onCloseEditModal}
         title="Edit your Todo"
       >
-        <div className="space-y-3">
-          <Input value={todoToEdit.title} />
-          <Textarea value={todoToEdit.description} />
-        </div>
-        <div className="flex items-center space-x-2 mt-6">
-          <Button className="bg-indigo-700 hover:bg-indigo-800 w-full rounded-lg text-white px-3 py-3 duration-200 font-medium">
-            Submit
-          </Button>
-          <Button
-            variant={"cancel"}
-            className="bg-gray-400 hover:bg-gray-600 w-full rounded-lg text-white px-3 py-3 duration-200 font-medium"
-            onClick={onCloseEditModal}
-          >
-            Cancel
-          </Button>
-        </div>
+        <form className="space-y-3" onSubmit={onSubmitHandler}>
+          <Input
+            name="title"
+            value={todoToEdit.title}
+            onChange={onChangeHandler}
+          />
+          <Textarea
+            name="description"
+            value={todoToEdit.description}
+            onChange={onChangeHandler}
+          />
+          <div className="flex items-center space-x-2 mt-6">
+            <Button className="bg-indigo-700 hover:bg-indigo-800 w-full rounded-lg text-white px-3 py-3 duration-200 font-medium">
+              Submit
+            </Button>
+            <button
+              className="bg-gray-400 hover:bg-gray-600 w-full rounded-lg text-white px-3 py-3 duration-200 font-medium"
+              onClick={onCloseEditModal}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
