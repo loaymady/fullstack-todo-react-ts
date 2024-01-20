@@ -7,6 +7,7 @@ import Textarea from "./ui/Textarea";
 import { ITodo } from "../interfaces";
 import axiosInstance from "../config/axios.config";
 import TodoSkeleton from "./TodoSkeleton";
+import { faker } from "@faker-js/faker";
 
 const storageKey = "loggedInUser";
 const userDataString = localStorage.getItem(storageKey);
@@ -170,6 +171,34 @@ const TodoList = () => {
     }
   };
 
+  const onGenerateTodos = async () => {
+    setIsUpdated(true);
+
+    for (let i = 0; i < 20; i++) {
+      try {
+        await axiosInstance.post(
+          `/todos`,
+          {
+            data: {
+              title: faker.word.words(5),
+              description: faker.lorem.paragraphs(2),
+              user: [userData?.user.id],
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userData?.jwt}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setIsUpdated(false);
+    setQueryKey((prev) => prev + 1);
+  };
+
   //For render Loading
   if (isLoading) {
     return (
@@ -182,42 +211,49 @@ const TodoList = () => {
   }
 
   return (
-    <div className="space-y-1 ">
-      <div className="flex items-center justify-center mb-6 space-x-2">
+    <div>
+      <div className="flex items-center justify-center mb-5 space-x-2">
         <Button size={"sm"} onClick={onOpenAddModal}>
           Post new todo
         </Button>
-        <Button variant={"outline"} size={"sm"}>
+        <Button
+          isLoading={isUpdated}
+          variant={"outline"}
+          size={"sm"}
+          onClick={onGenerateTodos}
+        >
           Generate todos
         </Button>
       </div>
-      {data.todos.length ? (
-        data.todos.map((todo: ITodo, idx: number) => (
-          <div
-            key={todo.id}
-            className="flex items-center justify-between hover:bg-gray-100 duration-300 p-3 rounded-md even:bg-gray-100"
-          >
-            <p className="w-full font-semibold">
-              {idx + 1}- {todo.title}
-            </p>
+      <div className="all-posts mb-10">
+        {data.todos.length ? (
+          data.todos.map((todo: ITodo, idx: number) => (
+            <div
+              key={todo.id}
+              className="flex items-center justify-between hover:bg-gray-100 duration-300 p-3 rounded-md even:bg-gray-100"
+            >
+              <p className="w-full font-semibold">
+                {idx + 1}- {todo.title}
+              </p>
 
-            <div className="flex items-center justify-end w-full space-x-3">
-              <Button size={"sm"} onClick={() => onOpenEditModal(todo)}>
-                Edit
-              </Button>
-              <Button
-                variant={"danger"}
-                size={"sm"}
-                onClick={() => onOpenConfirmModal(todo)}
-              >
-                Remove
-              </Button>
+              <div className="flex items-center justify-end w-full space-x-3">
+                <Button size={"sm"} onClick={() => onOpenEditModal(todo)}>
+                  Edit
+                </Button>
+                <Button
+                  variant={"danger"}
+                  size={"sm"}
+                  onClick={() => onOpenConfirmModal(todo)}
+                >
+                  Remove
+                </Button>
+              </div>
             </div>
-          </div>
-        ))
-      ) : (
-        <h3>No todods yet!</h3>
-      )}
+          ))
+        ) : (
+          <h3>No todods yet!</h3>
+        )}
+      </div>
 
       <Modal
         isOpen={isOpenAddModal}
