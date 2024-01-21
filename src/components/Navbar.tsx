@@ -31,6 +31,9 @@ const Navbar = () => {
         {userData ? (
           <div className="flex space-x-2 items-center">
             <li className="text-indigo-400 hover:text-indigo-600 duration-200 font-semibold text-lg">
+              <NavLink to="/todos">Todos</NavLink>
+            </li>
+            <li className="text-indigo-400 hover:text-indigo-600 duration-200 font-semibold text-lg">
               <NavLink to="/profile">Profile</NavLink>
             </li>
             <button

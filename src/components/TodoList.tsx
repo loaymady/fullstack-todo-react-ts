@@ -7,7 +7,6 @@ import Textarea from "./ui/Textarea";
 import { ITodo } from "../interfaces";
 import axiosInstance from "../config/axios.config";
 import TodoSkeleton from "./TodoSkeleton";
-import { faker } from "@faker-js/faker";
 
 const storageKey = "loggedInUser";
 const userDataString = localStorage.getItem(storageKey);
@@ -171,34 +170,6 @@ const TodoList = () => {
     }
   };
 
-  const onGenerateTodos = async () => {
-    setIsUpdated(true);
-
-    for (let i = 0; i < 20; i++) {
-      try {
-        await axiosInstance.post(
-          `/todos`,
-          {
-            data: {
-              title: faker.word.words(5),
-              description: faker.lorem.paragraphs(2),
-              user: [userData?.user.id],
-            },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${userData?.jwt}`,
-            },
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    setIsUpdated(false);
-    setQueryKey((prev) => prev + 1);
-  };
-
   //For render Loading
   if (isLoading) {
     return (
@@ -212,17 +183,14 @@ const TodoList = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-center mb-5 space-x-2">
-        <Button size={"sm"} onClick={onOpenAddModal}>
-          Post new todo
-        </Button>
+      <div className="flex items-center justify-center mb-7 space-x-2">
         <Button
-          isLoading={isUpdated}
           variant={"outline"}
+          className="p-2.5 border-2 border-indigo-600"
           size={"sm"}
-          onClick={onGenerateTodos}
+          onClick={onOpenAddModal}
         >
-          Generate todos
+          Post new todo
         </Button>
       </div>
       <div className="all-posts mb-10">
