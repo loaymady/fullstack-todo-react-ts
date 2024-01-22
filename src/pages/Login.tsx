@@ -31,7 +31,6 @@ const LoginPage = () => {
     setIsLoading(true);
     try {
       const { data: resData } = await axiosInstance.post("/auth/local", data);
-      console.log(resData);
       toast.success("You will navigate to the home page after 2 seconds!", {
         position: "bottom-center",
         duration: 1500,

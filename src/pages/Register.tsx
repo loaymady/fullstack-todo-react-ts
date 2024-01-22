@@ -52,7 +52,6 @@ const RegisterPage = () => {
       }, 2000);
     } catch (error) {
       const errorObj = error as AxiosError<ErrorResponse>;
-      // console.log(errorObj.response?.data.error.message);
       toast.error(`${errorObj.response?.data.error.message}`, {
         position: "bottom-center",
         duration: 1500,
@@ -67,7 +66,6 @@ const RegisterPage = () => {
     }
   };
 
-  // console.log(errors);
 
   // Renders
   const renderResgisterForm = REGISTER_FORM.map(
