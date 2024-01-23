@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://fullstack-todo-react-ts-backend-strapi.onrender.com/api",
+  baseURL: "https://strapi-todolist.onrender.com/api",
   timeout: 5000,
 });
 
