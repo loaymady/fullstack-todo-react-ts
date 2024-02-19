@@ -78,19 +78,11 @@ To set up the backend for the Fullstack Todo List app, follow these steps:
 
 1. Access the Strapi backend admin panel by visiting [https://strapi-todolist.onrender.com/admin](https://strapi-todolist.onrender.com/admin).
 
-2. Register a super admin account.
-
-3. In the admin panel, navigate to **Settings** => **USERS & PERMISSIONS PLUGIN** => **Roles** => **Authenticated**.
-
-4. In the **Permissions** section, for the "Todo" collection, check the following permissions: `delete`, `create`, `find`, `update`.
-
-5. In the same **Permissions** section, for the "Users-permissions" collection, check the following permissions: `create`, `find`, `me`, `findOne`, `update`.
-
-6. After checking the required permissions, click on the "Save" button to apply the changes.
+2. Login a super admin account.
+   - Email: admin@admin.com
+   - Password: Aa123456
 
 **Note:** Due to the nature of hosting services, it's possible that the Render domain may experience sleep mode delays. If you encounter any issues accessing the backend immediately after setup, please allow some time for the domain to activate.
-
-Now, your Strapi backend is configured to work seamlessly with the Fullstack Todo List app. You can make API requests and interact with the backend based on the specified permissions.
 
 ## Usage
 
